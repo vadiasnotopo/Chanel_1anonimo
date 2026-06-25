@@ -6,25 +6,23 @@
     <title>Chat Anônimo</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* MANTIVE TODO O SEU CSS ORIGINAL AQUI */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; overflow-x: hidden; }
 
-        .welcome-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; transition: opacity 0.6s ease, transform 0.6s ease; }
+        /* --- TELA DE BOAS VINDAS --- */
+        .welcome-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 1000; transition: opacity 0.6s ease, transform 0.6s ease;
+        }
         .welcome-content { text-align: center; animation: slideUpFade 1s ease-out forwards; }
         .welcome-icon { font-size: 4rem; color: #8b5cf6; margin-bottom: 20px; animation: float 3s ease-in-out infinite; }
         .welcome-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
-        /* Nome Anônimo em destaque e não clicável */
-        .welcome-subtitle { color: #cbd5e1; font-size: 1.3rem; margin-bottom: 40px; pointer-events: none; }
-        
-        .btn-enter { background: #8b5cf6; color: white; border: none; padding: 16px 40px; font-size: 1.2rem; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4); transition: all 0.3s; }
-        .btn-enter:hover { background: #7c3aed; }
-        
-        /* Estilos de Status na tela inicial */
-        .status-waiting { color: #fbbf24; font-size: 1.2rem; font-weight: bold; margin-top: 20px; animation: pulseGlowText 2s infinite; }
-        .btn-accepted { background: #10b981; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); }
-        .btn-accepted:hover { background: #059669; }
+        .welcome-subtitle { color: #94a3b8; font-size: 1.1rem; margin-bottom: 40px; }
+        .btn-enter { background: #8b5cf6; color: white; border: none; padding: 16px 40px; font-size: 1.2rem; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4); }
 
+        /* --- TELA PRINCIPAL --- */
         .main-app { display: none; max-width: 600px; margin: 0 auto; min-height: 100vh; background-color: #0f172a; padding-bottom: 80px; }
         .top-bar { position: sticky; top: 0; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; z-index: 100; }
         .app-title { font-size: 1.4rem; font-weight: bold; color: #f8fafc; display: flex; align-items: center; gap: 10px; }
@@ -32,16 +30,60 @@
         .robot-btn:hover { transform: scale(1.1); }
         .btn-open-panel { background: #8b5cf6; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; font-size: 1rem; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); }
 
-        .online-counter { position: absolute; left: 50%; transform: translateX(-50%); background: rgba(30, 41, 59, 0.6); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; color: #34d399; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(52, 211, 153, 0.2); backdrop-filter: blur(8px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 10px rgba(52, 211, 153, 0.05); animation: fadeInDown 0.5s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none; white-space: nowrap; }
-        .pulse-dot { width: 8px; height: 8px; background-color: #34d399; border-radius: 50%; display: inline-block; position: relative; }
-        .pulse-dot::after { content: ''; position: absolute; width: 100%; height: 100%; top: 0; left: 0; background-color: #34d399; border-radius: 50%; animation: pulseGlow 2s infinite ease-in-out; }
-        #online-count { display: inline-block; transition: transform 0.3s ease; }
-        .number-pop { animation: popNumber 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        /* --- CONTADOR ONLINE PROFISSIONAL --- */
+        .online-counter {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(30, 41, 59, 0.6);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #34d399;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 10px rgba(52, 211, 153, 0.05);
+            animation: fadeInDown 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #34d399;
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+        }
+        .pulse-dot::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: #34d399;
+            border-radius: 50%;
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+        #online-count {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        .number-pop {
+            animation: popNumber 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
+        /* --- PAINEL DE REGRAS (LATERAL) --- */
         .side-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 320px; height: 100%; background: #1e293b; z-index: 5000; padding: 30px; transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: 2px solid #8b5cf6; overflow-y: auto; }
         .side-panel.open { right: 0; }
         .rules-content { color: #cbd5e1; font-size: 1.05rem; line-height: 1.6; }
 
+        /* --- FEED DE MENSAGENS --- */
         .feed-container { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
         .msg-card { background: #1e293b; padding: 20px; border-radius: 16px; border-left: 4px solid #8b5cf6; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); animation: slideIn 0.4s ease-out forwards; }
         .msg-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
@@ -49,12 +91,14 @@
         .msg-author { font-weight: bold; color: #cbd5e1; font-size: 1.1rem; display: flex; align-items: center; }
         .msg-text { color: #f8fafc; font-size: 1.05rem; line-height: 1.5; word-wrap: break-word; margin-bottom: 15px; }
         
+        /* AÇÕES DA MENSAGEM */
         .msg-actions { display: flex; gap: 20px; border-top: 1px solid #334155; padding-top: 12px; }
         .action-btn { background: none; border: none; color: #94a3b8; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: color 0.2s; outline: none; }
         .action-btn span { font-size: 1rem; font-weight: bold; }
         .action-btn.liked-heart { color: #ef4444; }
         .action-btn.liked-heart i { animation: popAnimation 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
+        /* PAINÉIS (MODAIS) */
         .panel-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 2000; align-items: flex-end; justify-content: center; }
         .bottom-panel { background: #1e293b; width: 100%; max-width: 600px; padding: 20px 25px 30px; border-radius: 24px 24px 0 0; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; max-height: 85vh; }
         .bottom-panel.show { transform: translateY(0); }
@@ -62,12 +106,14 @@
         .panel-title { font-size: 1.2rem; font-weight: bold; }
         .btn-close { background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; }
 
+        /* POSTAR MENSAGEM */
         .post-input { width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 15px; color: white; font-size: 1.1rem; resize: none; outline: none; min-height: 120px; margin-bottom: 15px; }
         .post-controls { display: flex; gap: 10px; }
         .btn-dice { background: #334155; color: #8b5cf6; border: none; padding: 0 20px; border-radius: 12px; font-size: 1.5rem; cursor: pointer; transition: background 0.2s; }
         .btn-dice:hover { background: #475569; }
         .btn-send { flex: 1; background: #8b5cf6; color: white; border: none; padding: 14px; font-size: 1.1rem; font-weight: bold; border-radius: 12px; cursor: pointer; }
         
+        /* ÁREA DE COMENTÁRIOS */
         .comments-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; padding-right: 5px; }
         .comment-item { background: #0f172a; padding: 12px 15px; border-radius: 12px; display: flex; flex-direction: column; gap: 6px; }
         .comment-text { font-size: 0.95rem; color: #f8fafc; }
@@ -81,15 +127,26 @@
         .comment-input { flex: 1; background: #0f172a; border: 1px solid #334155; border-radius: 20px; padding: 12px 15px; color: white; outline: none; }
         .btn-send-comment { background: #8b5cf6; border: none; width: 45px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
 
+        /* ANIMAÇÕES */
         @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
         @keyframes slideIn { 0% { opacity: 0; transform: translateX(-20px); } 100% { opacity: 1; transform: translateX(0); } }
         @keyframes popAnimation { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
-        @keyframes pulseGlowText { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
         
-        @keyframes pulseGlow { 0% { transform: scale(0.95); opacity: 1; box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); } 70% { transform: scale(2.5); opacity: 0; box-shadow: 0 0 0 8px rgba(52, 211, 153, 0); } 100% { transform: scale(0.95); opacity: 0; box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); } }
-        @keyframes fadeInDown { 0% { opacity: 0; transform: translate(-50%, -15px); } 100% { opacity: 1; transform: translate(-50%, 0); } }
-        @keyframes popNumber { 0% { transform: scale(1); } 50% { transform: scale(1.3); color: #6ee7b7; } 100% { transform: scale(1); } }
+        @keyframes pulseGlow {
+            0% { transform: scale(0.95); opacity: 1; box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
+            70% { transform: scale(2.5); opacity: 0; box-shadow: 0 0 0 8px rgba(52, 211, 153, 0); }
+            100% { transform: scale(0.95); opacity: 0; box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+        }
+        @keyframes fadeInDown {
+            0% { opacity: 0; transform: translate(-50%, -15px); }
+            100% { opacity: 1; transform: translate(-50%, 0); }
+        }
+        @keyframes popNumber {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); color: #6ee7b7; }
+            100% { transform: scale(1); }
+        }
         
         .empty-state { text-align: center; color: #64748b; padding: 40px 20px; font-size: 1.1rem; }
     </style>
@@ -100,11 +157,8 @@
         <div class="welcome-content">
             <i class="fa-solid fa-mask welcome-icon"></i>
             <h1 class="welcome-title">Seja bem vindo</h1>
-            <p class="welcome-subtitle">Nome: <strong>Anônimo</strong></p>
-            
-            <div id="auth-area">
-                <button id="btn-request" class="btn-enter">Enviar solicitação</button>
-            </div>
+            <p class="welcome-subtitle">O seu espaço anônimo para falar.</p>
+            <button id="btn-enter" class="btn-enter">Entrar no Chat</button>
         </div>
     </div>
 
@@ -113,10 +167,12 @@
             <div class="app-title">
                 <i class="fa-solid fa-robot robot-btn" id="btn-open-rules"></i> Anônimo
             </div>
+            
             <div class="online-counter" id="online-counter">
                 <span class="pulse-dot"></span>
                 <span id="online-count">1</span> online
             </div>
+
             <button id="btn-open-panel" class="btn-open-panel"><i class="fa-solid fa-pen-to-square"></i> Postar</button>
         </div>
         <div id="feed-container" class="feed-container"></div>
@@ -161,142 +217,99 @@
     </div>
 
     <script type="module">
-        // Adicionado o setDoc na importação do firestore
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, increment, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        // Importando o Realtime Database de forma limpa para cuidar da presença volátil
         import { getDatabase, ref, set, onValue, onDisconnect } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
         const firebaseConfig = {
-          apiKey: "AIzaSyCqzqr5NlElyNUbpBmKGwZY3cysm_e6ir4",
-          authDomain: "anonimo-dc6b6.firebaseapp.com",
-          databaseURL: "https://anonimo-dc6b6-default-rtdb.firebaseio.com",
-          projectId: "anonimo-dc6b6",
-          storageBucket: "anonimo-dc6b6.firebasestorage.app",
-          messagingSenderId: "240757330985",
-          appId: "1:240757330985:web:8293b6084d02d7c329f838"
+          apiKey: "AIzaSyAqgPPmWG6cM3xpFLtOBjQJ8PmAVV7YgaY",
+          authDomain: "chatt-4bfcd.firebaseapp.com",
+          databaseURL: "https://chatt-4bfcd-default-rtdb.firebaseio.com",
+          projectId: "chatt-4bfcd",
+          storageBucket: "chatt-4bfcd.firebasestorage.app",
+          messagingSenderId: "1056039006721",
+          appId: "1:1056039006721:web:7df8605c6dc1b77b460600"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const rtdb = getDatabase(app);
 
+        // Limpeza preventiva de dados persistentes antigos
+        localStorage.removeItem("anon_user_id");
+        localStorage.removeItem("msg_likes");
+        localStorage.removeItem("thumb_likes");
+
+        // UI Elements
         const welcomeScreen = document.getElementById('welcome-screen');
         const mainApp = document.getElementById('main-app');
-        const authArea = document.getElementById('auth-area');
-
-        // ==========================================
-        // NOVO SISTEMA DE APROVAÇÃO (SALA DE ESPERA)
-        // ==========================================
-        
-        // Pega o ID do usuário salvo no navegador (se ele já pediu antes)
-        let meuIdAcesso = localStorage.getItem('id_acesso_anonimo');
-
-        function checarStatusAcesso() {
-            if (!meuIdAcesso) return; // Se não tem ID, deixa o botão de "Enviar solicitação"
-            
-            const docRef = doc(db, 'solicitacoes_acesso', meuIdAcesso);
-            
-            // Fica escutando o documento no banco de dados ao vivo
-            onSnapshot(docRef, (snap) => {
-                if (snap.exists()) {
-                    const dados = snap.data();
-                    
-                    if (dados.status === 'pendente') {
-                        // Se estiver pendente, muda a interface
-                        authArea.innerHTML = `<p class="status-waiting">Espera ser aceita...</p>`;
-                    } else if (dados.status === 'aceito') {
-                        // Se foi aceito, mostra o botão de Entrar
-                        authArea.innerHTML = `
-                            <button id="btn-final-enter" class="btn-enter btn-accepted">
-                                Você foi aceito[@] Entrar
-                            </button>
-                        `;
-                        // Evento de clique para finalmente entrar no app
-                        document.getElementById('btn-final-enter').addEventListener('click', entrarNoAppPrincipal);
-                    }
-                }
-            });
-        }
-
-        // Se ele já tiver o ID, já começa a escutar assim que a página carrega
-        if (meuIdAcesso) {
-            checarStatusAcesso();
-        } else {
-            // Se ele nunca pediu acesso, evento do botão "Enviar solicitação"
-            document.getElementById('btn-request').addEventListener('click', async () => {
-                // Cria um ID único para esse usuário e salva no navegador
-                meuIdAcesso = 'user_' + Date.now() + Math.random().toString(36).substring(2, 8);
-                localStorage.setItem('id_acesso_anonimo', meuIdAcesso);
-
-                // Mostra um aviso rápido enquanto envia pro banco
-                authArea.innerHTML = `<p class="status-waiting">Enviando...</p>`;
-
-                // Salva o pedido no Firebase com status 'pendente'
-                await setDoc(doc(db, 'solicitacoes_acesso', meuIdAcesso), {
-                    status: 'pendente',
-                    data: serverTimestamp()
-                });
-
-                // Começa a escutar se foi aprovado
-                checarStatusAcesso();
-            });
-        }
-
-        function entrarNoAppPrincipal() {
-            welcomeScreen.style.opacity = '0'; 
-            welcomeScreen.style.transform = 'scale(1.1)';
-            setTimeout(() => { 
-                welcomeScreen.style.display = 'none'; 
-                mainApp.style.display = 'block'; 
-                carregarMensagens(); 
-                inicializarContadorOnline(); 
-            }, 600);
-        }
-
-        // ==========================================
-        // FIM DO NOVO SISTEMA (O RESTO SEGUE IGUAL)
-        // ==========================================
-
         const feedContainer = document.getElementById('feed-container');
+        
+        // Panels
         const postOverlay = document.getElementById('post-panel-overlay');
         const postPanel = document.getElementById('post-panel');
         const postInput = document.getElementById('post-input');
+        
         const commentsOverlay = document.getElementById('comments-panel-overlay');
         const commentsPanel = document.getElementById('comments-panel');
         const commentsList = document.getElementById('comments-list');
         const commentInput = document.getElementById('comment-input');
-        const sideRules = document.getElementById('side-rules');
         
+        const sideRules = document.getElementById('side-rules');
         document.getElementById('btn-open-rules').onclick = () => sideRules.classList.add('open');
         document.getElementById('btn-close-rules').onclick = () => sideRules.classList.remove('open');
 
+        // Dado Aleatório
         const frases = ["Você namora?", "Qual seu maior sonho?", "O que você faria se ganhasse na loteria?", "Como está o seu dia?", "Qual sua música favorita?"];
         document.getElementById('btn-dice').onclick = () => { postInput.value = frases[Math.floor(Math.random() * frases.length)]; };
 
+        // Variáveis de Estado
         let mensagensGlobais = [];
         let activeMessageId = null;
         let likesSalvos = []; 
         let thumbsSalvos = [];
 
+        // --- SISTEMA DE PRESENÇA VOLÁTIL (ONLINE) ---
         function inicializarContadorOnline() {
+            // Gera um token aleatório que dura apenas nesta aba/memória RAM do usuário
             const idSessaoTemporaria = Math.random().toString(36).substring(2, 12);
             const minhaConexaoRef = ref(rtdb, 'presenca_anonima/' + idSessaoTemporaria);
             const poolPresencaRef = ref(rtdb, 'presenca_anonima');
+
+            // Marca como conectado e programa a destruição do nó automático ao fechar ou desconectar
             set(minhaConexaoRef, true);
             onDisconnect(minhaConexaoRef).remove();
+
+            // Escuta as sessões ativas globalmente em tempo real
             onValue(poolPresencaRef, (snapshot) => {
                 const conexoesAtivas = snapshot.val();
                 const totalOnline = conexoesAtivas ? Object.keys(conexoesAtivas).length : 1;
+                
                 const onlineCountEl = document.getElementById('online-count');
+                
+                // Dispara a animação caso o número de pessoas mude
                 if(onlineCountEl.innerText !== String(totalOnline)) {
                     onlineCountEl.innerText = totalOnline;
                     onlineCountEl.classList.remove('number-pop');
-                    void onlineCountEl.offsetWidth; 
+                    void onlineCountEl.offsetWidth; // Força re-flow do CSS para reiniciar a animação
                     onlineCountEl.classList.add('number-pop');
                 }
             });
         }
 
+        // Entrar
+        document.getElementById('btn-enter').addEventListener('click', () => {
+            welcomeScreen.style.opacity = '0'; welcomeScreen.style.transform = 'scale(1.1)';
+            setTimeout(() => { 
+                welcomeScreen.style.display = 'none'; 
+                mainApp.style.display = 'block'; 
+                carregarMensagens(); 
+                inicializarContadorOnline(); // Conecta o usuário de forma oculta apenas ao entrar no painel principal
+            }, 600);
+        });
+
+        // Controles de Abertura/Fechamento
         const togglePostPanel = (show) => {
             if(show) { postOverlay.style.display = 'flex'; setTimeout(() => postPanel.classList.add('show'), 10); }
             else { postPanel.classList.remove('show'); setTimeout(() => postOverlay.style.display = 'none', 300); }
@@ -315,6 +328,7 @@
             if(e.target === commentsOverlay) toggleCommentsPanel(false);
         });
 
+        // --- BUSCAR DADOS DO FIREBASE ---
         function carregarMensagens() {
             const q = query(collection(db, "mensagens_anonimas"), orderBy("timestamp", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -322,17 +336,21 @@
                 snapshot.forEach((docSnapshot) => {
                     mensagensGlobais.push({ id: docSnapshot.id, ...docSnapshot.data() });
                 });
+                
                 renderizarFeed();
                 if(activeMessageId) renderizarComentarios();
             });
         }
 
+        // --- DESENHAR FEED ---
         function renderizarFeed() {
             feedContainer.innerHTML = '';
+
             if (mensagensGlobais.length === 0) {
                 feedContainer.innerHTML = `<div class="empty-state"><i class="fa-solid fa-ghost" style="font-size:2.5rem; margin-bottom:15px; color:#334155;"></i><br>Nenhuma mensagem ainda. Seja o primeiro!</div>`;
                 return;
             }
+
             mensagensGlobais.forEach((msgObj) => {
                 const hasLiked = likesSalvos.includes(msgObj.id);
                 const coracaoClass = hasLiked ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
@@ -360,29 +378,36 @@
             });
         }
 
+        // LIKES E COMENTÁRIOS NO FEED
         feedContainer.addEventListener('click', (e) => {
             const btnLike = e.target.closest('[data-action="like-msg"]');
             if (btnLike) {
                 const id = btnLike.getAttribute('data-id');
                 const ref = doc(db, "mensagens_anonimas", id);
+                
                 const iconeCoração = btnLike.querySelector('i');
                 const spanNúmero = btnLike.querySelector('span');
                 let qtdAtual = parseInt(spanNúmero.innerText) || 0;
                 
                 if (likesSalvos.includes(id)) {
                     likesSalvos = likesSalvos.filter(item => item !== id);
+                    
                     btnLike.classList.remove('liked-heart');
                     iconeCoração.className = 'fa-regular fa-heart';
                     spanNúmero.innerText = Math.max(0, qtdAtual - 1);
+                    
                     updateDoc(ref, { likes: increment(-1) });
                 } else {
                     likesSalvos.push(id);
+                    
                     btnLike.classList.add('liked-heart');
                     iconeCoração.className = 'fa-solid fa-heart';
                     spanNúmero.innerText = qtdAtual + 1;
+                    
                     updateDoc(ref, { likes: increment(1) });
                 }
             }
+
             const btnComment = e.target.closest('[data-action="open-comments"]');
             if (btnComment) {
                 activeMessageId = btnComment.getAttribute('data-id');
@@ -391,9 +416,11 @@
             }
         });
 
+        // DESENHAR COMENTÁRIOS
         function renderizarComentarios() {
             const msg = mensagensGlobais.find(m => m.id === activeMessageId);
             if(!msg) return;
+            
             const commentsArray = msg.comentarios || [];
             commentsList.innerHTML = '';
             
@@ -401,10 +428,12 @@
                 commentsList.innerHTML = `<div class="empty-state" style="font-size:0.95rem; padding: 20px 0;">Nenhum comentário. Seja o primeiro!</div>`;
                 return;
             }
+
             commentsArray.forEach(c => {
                 const hasLikedThumb = thumbsSalvos.includes(c.id);
                 const thumbClass = hasLikedThumb ? 'fa-solid fa-thumbs-up' : 'fa-regular fa-thumbs-up';
                 const btnThumbClass = hasLikedThumb ? 'btn-thumb liked-thumb' : 'btn-thumb';
+
                 const div = document.createElement('div');
                 div.className = 'comment-item';
                 div.innerHTML = `
@@ -420,56 +449,77 @@
                     const cId = c.id;
                     const index = commentsArray.findIndex(item => item.id === cId);
                     if(index === -1) return;
+                    
                     const btnClicado = e.currentTarget;
                     const iconeMão = btnClicado.querySelector('i');
                     const spanNúmeroComentário = btnClicado.querySelector('span');
                     let qtdLikesComentário = parseInt(spanNúmeroComentário.innerText) || 0;
+
                     let novosComentarios = [...commentsArray];
                     
                     if (thumbsSalvos.includes(cId)) {
                         thumbsSalvos = thumbsSalvos.filter(i => i !== cId);
                         novosComentarios[index].likes = Math.max(0, (novosComentarios[index].likes || 1) - 1);
+                        
                         btnClicado.classList.remove('liked-thumb');
                         iconeMão.className = 'fa-regular fa-thumbs-up';
                         spanNúmeroComentário.innerText = Math.max(0, qtdLikesComentário - 1);
+                        
                     } else {
                         thumbsSalvos.push(cId);
                         novosComentarios[index].likes = (novosComentarios[index].likes || 0) + 1;
+                        
                         btnClicado.classList.add('liked-thumb');
                         iconeMão.className = 'fa-solid fa-thumbs-up';
                         spanNúmeroComentário.innerText = qtdLikesComentário + 1;
                     }
+
                     updateDoc(doc(db, "mensagens_anonimas", activeMessageId), { comentarios: novosComentarios });
                 });
+
                 commentsList.appendChild(div);
             });
             commentsList.scrollTop = commentsList.scrollHeight;
         }
 
+        // Postar Mensagem
         document.getElementById('btn-send').addEventListener('click', async () => {
             const txt = postInput.value.trim(); if(!txt) return;
             const btn = document.getElementById('btn-send'); btn.disabled = true; btn.innerText = 'Enviando...';
             try {
                 await addDoc(collection(db, "mensagens_anonimas"), { 
-                    texto: txt, likes: 0, comentarios: [], timestamp: serverTimestamp() 
+                    texto: txt, 
+                    likes: 0, 
+                    comentarios: [], 
+                    timestamp: serverTimestamp() 
                 });
                 postInput.value = ''; togglePostPanel(false);
             } catch(e) {} finally { btn.disabled = false; btn.innerText = 'Enviar Mensagem'; }
         });
 
+        // Enviar Comentário
         document.getElementById('btn-send-comment').addEventListener('click', async () => {
             const txt = commentInput.value.trim();
             if(!txt || !activeMessageId) return;
+
             const msg = mensagensGlobais.find(m => m.id === activeMessageId);
             const comentariosAtuais = msg.comentarios || [];
-            const novoComment = { id: Date.now().toString() + Math.floor(Math.random()*1000), texto: txt, likes: 0 };
+            
+            const novoComment = {
+                id: Date.now().toString() + Math.floor(Math.random()*1000),
+                texto: txt,
+                likes: 0
+            };
+
             commentInput.value = '';
+            
             try {
                 await updateDoc(doc(db, "mensagens_anonimas", activeMessageId), {
                     comentarios: [...comentariosAtuais, novoComment]
                 });
             } catch(e) {}
         });
+
     </script>
 </body>
 </html>
