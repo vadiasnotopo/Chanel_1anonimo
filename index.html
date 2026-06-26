@@ -3,88 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Chat Anônimo</title>
+    <title>Chat Anônimo - Nexos</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; overflow-x: hidden; }
 
-        /* TELA DE BOAS-VINDAS PREMIUM (ANIMAÇÃO 45K) */
+        /* TELA DE BOAS-VINDAS PREMIUM */
         .welcome-screen { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
             z-index: 1000; 
-            transition: opacity 0.8s cubic-bezier(0.85, 0, 0.15, 1), 
-                        transform 0.8s cubic-bezier(0.85, 0, 0.15, 1),
-                        filter 0.8s cubic-bezier(0.85, 0, 0.15, 1);
+            transition: opacity 0.8s cubic-bezier(0.85, 0, 0.15, 1), transform 0.8s cubic-bezier(0.85, 0, 0.15, 1), filter 0.8s cubic-bezier(0.85, 0, 0.15, 1);
             will-change: transform, opacity, filter;
         }
         
-        .welcome-screen.premium-exit {
-            opacity: 0;
-            transform: scale(1.12);
-            filter: blur(15px);
-            pointer-events: none;
-        }
-
+        .welcome-screen.premium-exit { opacity: 0; transform: scale(1.12); filter: blur(15px); pointer-events: none; }
         .welcome-content { text-align: center; animation: slideUpFade 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .welcome-icon { font-size: 4rem; color: #8b5cf6; margin-bottom: 20px; animation: float 3s ease-in-out infinite; }
         .welcome-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; }
         .welcome-subtitle { color: #cbd5e1; font-size: 1.3rem; margin-bottom: 40px; pointer-events: none; }
         
         .btn-enter { 
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); 
-            color: white; 
-            border: none; 
-            padding: 16px 50px; 
-            font-size: 1.2rem; 
-            font-weight: bold; 
-            border-radius: 30px; 
-            cursor: pointer; 
-            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4); 
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
-            position: relative;
-            overflow: hidden;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; border: none; 
+            padding: 16px 50px; font-size: 1.2rem; font-weight: bold; border-radius: 30px; cursor: pointer; 
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+            position: relative; overflow: hidden;
         }
         .btn-enter::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.6s;
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent); transition: 0.6s;
         }
-        .btn-enter:hover { 
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.6);
-        }
+        .btn-enter:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(139, 92, 246, 0.6); }
         .btn-enter:hover::before { left: 100%; }
+
+        /* TELA DE BANIMENTO */
+        .ban-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f172a; display: none; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 9999; color: #ef4444; text-align: center; padding: 20px;
+        }
+        .ban-screen i { font-size: 5rem; margin-bottom: 20px; }
+        .ban-screen h1 { font-size: 2.5rem; margin-bottom: 10px; color: white;}
+        .ban-screen p { color: #94a3b8; font-size: 1.1rem; }
         
-        /* APP PRINCIPAL E REVELAÇÃO CINEMATOGRÁFICA */
+        /* APP PRINCIPAL */
         .main-app { 
-            display: none; 
-            max-width: 600px; 
-            margin: 0 auto; 
-            min-height: 100vh; 
-            background-color: #0f172a; 
-            padding-bottom: 80px; 
-            opacity: 0;
-            transform: translateY(40px);
-            will-change: transform, opacity;
+            display: none; max-width: 600px; margin: 0 auto; min-height: 100vh; 
+            background-color: #0f172a; padding-bottom: 80px; opacity: 0; transform: translateY(40px); will-change: transform, opacity;
         }
         
-        .main-app.premium-reveal {
-            display: block;
-            animation: appReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+        .main-app.premium-reveal { display: block; animation: appReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
         .top-bar { position: sticky; top: 0; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; z-index: 100; }
         .app-title { font-size: 1.4rem; font-weight: bold; color: #f8fafc; display: flex; align-items: center; gap: 10px; }
@@ -92,7 +62,7 @@
         .robot-btn:hover { transform: scale(1.1); }
         .btn-open-panel { background: #8b5cf6; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; font-size: 1rem; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); }
 
-        /* CONTADOR ONLINE (Agora clicável) */
+        /* CONTADOR ONLINE */
         .online-counter { position: absolute; left: 50%; transform: translateX(-50%); background: rgba(30, 41, 59, 0.6); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; color: #34d399; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(52, 211, 153, 0.2); backdrop-filter: blur(8px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 10px rgba(52, 211, 153, 0.05); animation: fadeInDown 0.5s cubic-bezier(0.16, 1, 0.3, 1); white-space: nowrap; cursor: pointer; transition: background 0.3s, transform 0.3s ease; }
         .online-counter:hover { background: rgba(30, 41, 59, 0.9); transform: translateX(-50%) scale(1.05); }
         .pulse-dot { width: 8px; height: 8px; background-color: #34d399; border-radius: 50%; display: inline-block; position: relative; }
@@ -100,13 +70,16 @@
         #online-count { display: inline-block; transition: transform 0.3s ease; }
         .number-pop { animation: popNumber 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-        /* PAINÉIS LATERAIS (Regras e Usuários) */
-        .side-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 320px; height: 100%; background: #1e293b; z-index: 5000; padding: 30px; transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: 2px solid #8b5cf6; overflow-y: auto; }
+        /* PAINÉIS LATERAIS */
+        .side-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 320px; height: 100%; background: #1e293b; z-index: 5000; padding: 30px; transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: 2px solid #8b5cf6; overflow-y: auto; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
         .side-panel.open { right: 0; }
         .rules-content { color: #cbd5e1; font-size: 1.05rem; line-height: 1.6; }
-        .btn-close { background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; }
+        .btn-close { background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; transition: color 0.2s, transform 0.2s; }
+        .btn-close:hover { color: #f8fafc; transform: scale(1.1); }
+        
+        .header-actions { display: flex; justify-content: flex-end; gap: 15px; align-items: center; }
 
-        /* LISTA DE USUÁRIOS ONLINE/OFFLINE */
+        /* LISTA DE USUÁRIOS E NOTIFICAÇÕES */
         .user-list-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #334155; }
         .user-list-info { display: flex; align-items: center; gap: 12px; }
         .user-list-avatar { width: 40px; height: 40px; background: #0f172a; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #8b5cf6; font-size: 1.1rem; border: 1px solid #334155; }
@@ -145,10 +118,17 @@
         .btn-send { flex: 1; background: #8b5cf6; color: white; border: none; padding: 14px; font-size: 1.1rem; font-weight: bold; border-radius: 12px; cursor: pointer; }
         
         .comments-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; padding-right: 5px; }
-        .comment-item { background: #0f172a; padding: 12px 15px; border-radius: 12px; display: flex; flex-direction: column; gap: 6px; }
+        .comment-item { background: #0f172a; padding: 12px 15px; border-radius: 12px; display: flex; flex-direction: column; gap: 8px; }
         .comment-text { font-size: 0.95rem; color: #f8fafc; }
         .comment-text strong { color: #8b5cf6; }
-        .comment-actions { display: flex; justify-content: flex-end; }
+        
+        /* ESTILOS DE RESPOSTA */
+        .quoted-reply { background: rgba(139, 92, 246, 0.1); border-left: 3px solid #8b5cf6; padding: 8px 12px; margin-bottom: 6px; border-radius: 4px; font-size: 0.85rem; color: #cbd5e1; }
+        .reply-preview-box { background: #334155; border-left: 3px solid #8b5cf6; padding: 10px 15px; margin-bottom: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: #cbd5e1; }
+        .btn-reply-comment { background: none; border: none; color: #64748b; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 5px; outline: none; transition: color 0.2s; }
+        .btn-reply-comment:hover { color: #8b5cf6; }
+
+        .comment-actions { display: flex; justify-content: flex-end; gap: 15px; align-items: center; }
         .btn-thumb { background: none; border: none; color: #64748b; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 5px; outline: none; }
         .btn-thumb.liked-thumb { color: #3b82f6; }
         .btn-thumb.liked-thumb i { animation: popAnimation 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
@@ -171,6 +151,12 @@
 </head>
 <body>
 
+    <div id="ban-screen" class="ban-screen">
+        <i class="fa-solid fa-gavel"></i>
+        <h1>BANIDO</h1>
+        <p>Você foi banido pelo Bot de Moderação por violar as regras.</p>
+    </div>
+
     <div id="welcome-screen" class="welcome-screen">
         <div class="welcome-content">
             <i class="fa-solid fa-mask welcome-icon"></i>
@@ -187,7 +173,6 @@
             <div class="app-title">
                 <i class="fa-solid fa-robot robot-btn" id="btn-open-rules"></i> Anônimo
             </div>
-            <!-- Contador Online agora é clicável para abrir o novo painel -->
             <div class="online-counter" id="online-counter">
                 <span class="pulse-dot"></span>
                 <span id="online-count">1</span> online
@@ -197,9 +182,10 @@
         <div id="feed-container" class="feed-container"></div>
     </div>
 
-    <!-- PAINEL DE REGRAS -->
     <div id="side-rules" class="side-panel">
-        <button id="btn-close-rules" class="btn-close" style="float: right;"><i class="fa-solid fa-xmark"></i></button>
+        <div class="header-actions">
+            <button id="btn-close-rules" class="btn-close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="rules-content" style="clear: both;">
             <h2 style="color: #8b5cf6; margin-bottom: 15px; margin-top: 10px;">Regras do Chat</h2>
             <p>• NÃO PODE CITAR NOMES</p><br>
@@ -208,20 +194,32 @@
         </div>
     </div>
 
-    <!-- NOVO PAINEL: USUÁRIOS ONLINE E OFFLINE -->
     <div id="side-online" class="side-panel">
-        <button id="btn-close-online" class="btn-close" style="float: right;"><i class="fa-solid fa-xmark"></i></button>
+        <div class="header-actions">
+            <button id="btn-open-notifications" class="btn-close" style="color: #fbbf24;"><i class="fa-regular fa-bell"></i></button>
+            <button id="btn-close-online" class="btn-close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="rules-content" style="clear: both;">
             <h2 style="color: #34d399; margin-bottom: 20px; margin-top: 10px; display: flex; align-items: center; gap: 10px;">
                 <i class="fa-solid fa-users"></i> Pessoas
             </h2>
-            <div id="users-list-container">
-                <!-- A lista será gerada aqui pelo JavaScript -->
-            </div>
+            <div id="users-list-container"></div>
         </div>
     </div>
 
-    <!-- PAINÉIS DE POSTAGEM E COMENTÁRIO -->
+    <div id="side-notifications" class="side-panel">
+        <div class="header-actions">
+            <button id="btn-close-notifications" class="btn-close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="rules-content" style="clear: both;">
+            <h2 style="color: #fbbf24; margin-bottom: 20px; margin-top: 10px; display: flex; align-items: center; gap: 10px;">
+                <i class="fa-solid fa-bell"></i> Notificações
+            </h2>
+            <div id="notifications-list-container">
+                </div>
+        </div>
+    </div>
+
     <div id="post-panel-overlay" class="panel-overlay">
         <div id="post-panel" class="bottom-panel">
             <div class="panel-header">
@@ -243,6 +241,15 @@
                 <button id="btn-close-comments" class="btn-close"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div id="comments-list" class="comments-list"></div>
+            
+            <div id="reply-preview-container" style="display: none;" class="reply-preview-box">
+                <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90%;">
+                    <strong style="color: #8b5cf6;"><i class="fa-solid fa-reply"></i> Respondendo Anônimo:</strong> 
+                    <span id="reply-preview-text" style="margin-left: 5px;"></span>
+                </div>
+                <button id="btn-cancel-reply" class="btn-close" style="font-size: 1.1rem;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
             <div class="comment-input-row">
                 <input type="text" id="comment-input" class="comment-input" placeholder="Escreva um comentário...">
                 <button id="btn-send-comment" class="btn-send-comment"><i class="fa-solid fa-paper-plane"></i></button>
@@ -252,8 +259,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        /* Renomeamos serverTimestamp para evitar conflito entre o Banco de Dados (RTDB) e o Firestore */
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp as fsServerTimestamp, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        // Importando getDoc e setDoc para o sistema de Banimento
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp as fsServerTimestamp, doc, updateDoc, increment, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
         import { getDatabase, ref, set, onValue, onDisconnect, serverTimestamp as dbServerTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
         const firebaseConfig = {
@@ -270,11 +277,57 @@
         const db = getFirestore(app);
         const rtdb = getDatabase(app);
 
+        // Identificador único persistente (Garante que você seja a mesma pessoa sempre)
+        let myUserId = localStorage.getItem('meuAnonId');
+        if (!myUserId) {
+            myUserId = 'anon_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('meuAnonId', myUserId);
+        }
+
+        // ==========================================
+        // SISTEMA DE MODERAÇÃO / BOT
+        // ==========================================
+        const palavrasProibidas = ["merda", "lixo", "fdp", "porra", "puta"]; // Edite as palavras aqui
+        
+        async function verificarSeEstouBanido() {
+            try {
+                const docSnap = await getDoc(doc(db, "banned_users", myUserId));
+                if (docSnap.exists() && docSnap.data().banned) {
+                    document.getElementById('welcome-screen').style.display = 'none';
+                    document.getElementById('main-app').style.display = 'none';
+                    document.getElementById('ban-screen').style.display = 'flex';
+                    return true;
+                }
+            } catch(e) { console.error(e); }
+            return false;
+        }
+
+        // Bot analisa o texto
+        async function botAnalisarTexto(texto) {
+            const textoFormatado = texto.toLowerCase();
+            const contemPalavrao = palavrasProibidas.some(palavra => textoFormatado.includes(palavra));
+            
+            if (contemPalavrao) {
+                alert("🤖 BOT DE MODERAÇÃO: Sua mensagem foi bloqueada pois contém palavras proibidas pelas regras.");
+                
+                // OPCIONAL: Se quiser que o bot dê ban imediato na pessoa que falar palavrão, descomente as 2 linhas abaixo:
+                // await setDoc(doc(db, "banned_users", myUserId), { banned: true, reason: "Palavreado inadequado", time: fsServerTimestamp() });
+                // window.location.reload(); 
+
+                return false; // Retorna falso para não deixar enviar
+            }
+            return true; // Texto limpo
+        }
+        // ==========================================
+
         const welcomeScreen = document.getElementById('welcome-screen');
         const mainApp = document.getElementById('main-app');
 
-        // FUNÇÃO DE ENTRADA DIRETA
-        document.getElementById('btn-final-enter').addEventListener('click', () => {
+        document.getElementById('btn-final-enter').addEventListener('click', async () => {
+            // Verifica banimento antes de deixar entrar
+            const isBanned = await verificarSeEstouBanido();
+            if (isBanned) return;
+
             welcomeScreen.classList.add('premium-exit');
             setTimeout(() => { 
                 welcomeScreen.style.display = 'none'; 
@@ -293,18 +346,26 @@
         const commentsList = document.getElementById('comments-list');
         const commentInput = document.getElementById('comment-input');
         
-        // Controle do painel de regras
+        // Controle dos painéis laterais
         const sideRules = document.getElementById('side-rules');
+        const sideOnline = document.getElementById('side-online');
+        const sideNotifications = document.getElementById('side-notifications');
+
         document.getElementById('btn-open-rules').onclick = () => sideRules.classList.add('open');
         document.getElementById('btn-close-rules').onclick = () => sideRules.classList.remove('open');
 
-        // Controle do NOVO painel de Pessoas Online
-        const sideOnline = document.getElementById('side-online');
         document.getElementById('online-counter').onclick = () => {
             sideOnline.classList.add('open');
-            renderizarListaUsuarios(); // Força renderização pra atualizar os tempos
+            renderizarListaUsuarios();
         };
         document.getElementById('btn-close-online').onclick = () => sideOnline.classList.remove('open');
+
+        document.getElementById('btn-open-notifications').onclick = () => {
+            sideOnline.classList.remove('open');
+            sideNotifications.classList.add('open');
+            renderizarNotificacoes();
+        };
+        document.getElementById('btn-close-notifications').onclick = () => sideNotifications.classList.remove('open');
 
         const frases = ["Você namora?", "Qual seu maior sonho?", "O que você faria se ganhasse na loteria?", "Como está o seu dia?", "Qual sua música favorita?"];
         document.getElementById('btn-dice').onclick = () => { postInput.value = frases[Math.floor(Math.random() * frases.length)]; };
@@ -313,48 +374,40 @@
         let activeMessageId = null;
         let likesSalvos = []; 
         let thumbsSalvos = [];
-
-        // Variáveis Globais de Usuários (para o painel lateral)
         let listaOnlineData = [];
         let listaOfflineData = [];
+        let replyingToData = null;
 
-        // Função que calcula o tempo (ex: "agora mesmo", "há 2 min", "há 1h")
         function formatarTempo(timestamp) {
             if (!timestamp) return 'agora';
             const diffSecs = Math.floor((Date.now() - timestamp) / 1000);
-            
             if (diffSecs < 60) return 'agora mesmo';
             const diffMins = Math.floor(diffSecs / 60);
             if (diffMins < 60) return `há ${diffMins} min`;
             const diffHrs = Math.floor(diffMins / 60);
             if (diffHrs < 24) return `há ${diffHrs}h`;
-            const diffDias = Math.floor(diffHrs / 24);
-            return `há ${diffDias} dias`;
+            return `há ${Math.floor(diffHrs / 24)} dias`;
         }
 
-        // Função para desenhar o HTML da lista do painel lateral
         function renderizarListaUsuarios() {
             const container = document.getElementById('users-list-container');
             if (!container) return;
-            
             let html = '';
-            
-            // Renderiza usuários ONLINE
             listaOnlineData.forEach(user => {
+                // Se for você mesmo, adiciona um "(Você)" na lista
+                const isMe = user.id === myUserId ? " <span style='color:#8b5cf6; font-size:0.8rem;'>(Você)</span>" : "";
                 html += `
                 <div class="user-list-item">
                     <div class="user-list-info">
                         <div class="user-list-avatar"><i class="fa-solid fa-user-secret"></i></div>
                         <div>
-                            <div class="user-list-name">Anônimo</div>
+                            <div class="user-list-name">Anônimo${isMe}</div>
                             <div class="user-list-time">Online ${formatarTempo(user.time)}</div>
                         </div>
                     </div>
                     <div class="status-dot status-online"></div>
                 </div>`;
             });
-            
-            // Renderiza usuários OFFLINE na parte de baixo
             if (listaOfflineData.length > 0) {
                 html += `<div class="offline-section-title">Desconectados recentemente</div>`;
                 listaOfflineData.forEach(user => {
@@ -371,54 +424,86 @@
                     </div>`;
                 });
             }
-            
             container.innerHTML = html;
         }
 
-        // Atualiza os minutos/horas na tela sem precisar que alguém entre ou saia do chat
-        setInterval(() => {
-            if (sideOnline.classList.contains('open')) {
-                renderizarListaUsuarios();
+        function renderizarNotificacoes() {
+            const container = document.getElementById('notifications-list-container');
+            let notifs = [];
+
+            mensagensGlobais.forEach(msg => {
+                if (msg.authorId === myUserId) {
+                    if (msg.likes > 0) {
+                        notifs.push({ icon: 'fa-solid fa-heart', color: '#ef4444', text: `Um Anônimo curtiu sua mensagem: <i>"${msg.texto.substring(0, 25)}..."</i>` });
+                    }
+                    if (msg.comentarios) {
+                        msg.comentarios.forEach(c => {
+                            if (c.authorId !== myUserId) {
+                                notifs.push({ icon: 'fa-solid fa-comment', color: '#3b82f6', text: `Um Anônimo comentou no seu post: <i>"${c.texto.substring(0, 25)}..."</i>` });
+                            }
+                        });
+                    }
+                }
+                
+                if (msg.comentarios) {
+                    msg.comentarios.forEach(c => {
+                        if (c.authorId === myUserId && c.likes > 0) {
+                            notifs.push({ icon: 'fa-solid fa-thumbs-up', color: '#10b981', text: `Um Anônimo curtiu seu comentário: <i>"${c.texto.substring(0, 25)}..."</i>` });
+                        }
+                        if (c.replyTo && c.replyTo.authorId === myUserId && c.authorId !== myUserId) {
+                            notifs.push({ icon: 'fa-solid fa-reply', color: '#8b5cf6', text: `Um Anônimo respondeu ao seu comentário: <i>"${c.texto.substring(0, 25)}..."</i>` });
+                        }
+                    });
+                }
+            });
+
+            if(notifs.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fa-regular fa-bell-slash" style="font-size:2rem; margin-bottom:10px;"></i><br>Nenhuma notificação ainda.</div>`;
+                return;
             }
-        }, 30000); // Roda a cada 30 segundos
+
+            let html = '';
+            notifs.reverse().forEach(n => {
+                html += `
+                <div class="user-list-item" style="align-items: flex-start; padding: 15px 0;">
+                    <div class="user-list-info" style="align-items: flex-start;">
+                        <div class="user-list-avatar" style="color: ${n.color}; border-color: rgba(255,255,255,0.05); background: rgba(0,0,0,0.2);"><i class="${n.icon}"></i></div>
+                        <div style="font-size: 0.95rem; color: #cbd5e1; line-height: 1.4; padding-top: 2px;">${n.text}</div>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        setInterval(() => {
+            if (sideOnline.classList.contains('open')) renderizarListaUsuarios();
+        }, 30000);
 
         function inicializarContadorOnline() {
-            const idSessaoTemporaria = Math.random().toString(36).substring(2, 12);
-            const minhaConexaoRef = ref(rtdb, 'presenca_anonima/' + idSessaoTemporaria);
+            // CORREÇÃO AQUI: Em vez de ID aleatório, usa o myUserId!
+            // Isso previne que você crie dezenas de contas ao sair e entrar.
+            const minhaConexaoRef = ref(rtdb, 'presenca_anonima/' + myUserId);
             const poolPresencaRef = ref(rtdb, 'presenca_anonima');
             
-            // Agora salvamos um Objeto com status e hora (usando horário do servidor do Firebase)
             set(minhaConexaoRef, { status: 'online', last_changed: dbServerTimestamp() });
-            
-            // Quando a janela fecha, o Firebase marca o usuário como offline e salva a hora
             onDisconnect(minhaConexaoRef).set({ status: 'offline', last_changed: dbServerTimestamp() });
 
             onValue(poolPresencaRef, (snapshot) => {
-                const conexoesAtivas = snapshot.val() || {};
+                const conexoes = snapshot.val() || {};
                 let count = 0;
-                
-                listaOnlineData = [];
-                listaOfflineData = [];
+                listaOnlineData = []; listaOfflineData = [];
 
-                Object.keys(conexoesAtivas).forEach(key => {
-                    const user = conexoesAtivas[key];
-                    // Proteção caso existam usuários do seu código antigo que só salvaram "true"
+                Object.keys(conexoes).forEach(key => {
+                    const user = conexoes[key];
                     const isOnline = user.status === 'online' || user === true; 
                     const time = user.last_changed || Date.now();
 
-                    if(isOnline) {
-                        count++;
-                        listaOnlineData.push({ id: key, time: time });
-                    } else {
-                        listaOfflineData.push({ id: key, time: time });
-                    }
+                    if(isOnline) { count++; listaOnlineData.push({ id: key, time }); } 
+                    else { listaOfflineData.push({ id: key, time }); }
                 });
 
-                // Ordena do mais recente pro mais antigo
                 listaOnlineData.sort((a, b) => b.time - a.time);
                 listaOfflineData.sort((a, b) => b.time - a.time);
-                
-                // Limita para não carregar a tela de desconectados ao infinito
                 listaOfflineData = listaOfflineData.slice(0, 30); 
 
                 const onlineCountEl = document.getElementById('online-count');
@@ -428,13 +513,16 @@
                     void onlineCountEl.offsetWidth; 
                     onlineCountEl.classList.add('number-pop');
                 }
-
-                // Se o painel estiver aberto enquanto alguém entra/sai, atualiza ele instantaneamente
-                if (sideOnline.classList.contains('open')) {
-                    renderizarListaUsuarios();
-                }
+                if (sideOnline.classList.contains('open')) renderizarListaUsuarios();
             });
         }
+
+        function cancelarResposta() {
+            replyingToData = null;
+            document.getElementById('reply-preview-container').style.display = 'none';
+        }
+
+        document.getElementById('btn-cancel-reply').addEventListener('click', cancelarResposta);
 
         const togglePostPanel = (show) => {
             if(show) { postOverlay.style.display = 'flex'; setTimeout(() => postPanel.classList.add('show'), 10); }
@@ -445,7 +533,7 @@
 
         const toggleCommentsPanel = (show) => {
             if(show) { commentsOverlay.style.display = 'flex'; setTimeout(() => commentsPanel.classList.add('show'), 10); }
-            else { commentsPanel.classList.remove('show'); setTimeout(() => commentsOverlay.style.display = 'none', 300); activeMessageId = null; }
+            else { commentsPanel.classList.remove('show'); setTimeout(() => commentsOverlay.style.display = 'none', 300); activeMessageId = null; cancelarResposta(); }
         };
         document.getElementById('btn-close-comments').addEventListener('click', () => toggleCommentsPanel(false));
         
@@ -463,6 +551,7 @@
                 });
                 renderizarFeed();
                 if(activeMessageId) renderizarComentarios();
+                if(sideNotifications.classList.contains('open')) renderizarNotificacoes(); 
             });
         }
 
@@ -525,6 +614,7 @@
             const btnComment = e.target.closest('[data-action="open-comments"]');
             if (btnComment) {
                 activeMessageId = btnComment.getAttribute('data-id');
+                cancelarResposta();
                 renderizarComentarios();
                 toggleCommentsPanel(true);
             }
@@ -544,18 +634,33 @@
                 const hasLikedThumb = thumbsSalvos.includes(c.id);
                 const thumbClass = hasLikedThumb ? 'fa-solid fa-thumbs-up' : 'fa-regular fa-thumbs-up';
                 const btnThumbClass = hasLikedThumb ? 'btn-thumb liked-thumb' : 'btn-thumb';
+                
+                let quotedHtml = '';
+                if (c.replyTo) {
+                    quotedHtml = `<div class="quoted-reply"><i class="fa-solid fa-reply"></i> Respondendo Anônimo: <em>${c.replyTo.texto}</em></div>`;
+                }
+
                 const div = document.createElement('div');
                 div.className = 'comment-item';
                 div.innerHTML = `
-                    <div class="comment-text"><strong style="display:flex; align-items:center;">Anônimo:</strong> <span style="display:block; margin-top:4px;">${c.texto}</span></div>
+                    <div class="comment-text">
+                        <strong style="display:flex; align-items:center;">Anônimo:</strong> 
+                        <div style="display:block; margin-top:6px;">
+                            ${quotedHtml}
+                            ${c.texto}
+                        </div>
+                    </div>
                     <div class="comment-actions">
-                        <button class="${btnThumbClass}" data-comment-id="${c.id}">
+                        <button class="btn-reply-comment" data-comment-id="${c.id}" data-comment-text="${c.texto}" data-author-id="${c.authorId || ''}">
+                            <i class="fa-solid fa-reply"></i> Responder
+                        </button>
+                        <button class="${btnThumbClass}" data-like-id="${c.id}">
                             <i class="${thumbClass}"></i> <span>${c.likes || 0}</span>
                         </button>
                     </div>
                 `;
                 
-                div.querySelector('button').addEventListener('click', (e) => {
+                div.querySelector(`[data-like-id="${c.id}"]`).addEventListener('click', (e) => {
                     const cId = c.id;
                     const index = commentsArray.findIndex(item => item.id === cId);
                     if(index === -1) return;
@@ -580,6 +685,19 @@
                     }
                     updateDoc(doc(db, "mensagens_anonimas", activeMessageId), { comentarios: novosComentarios });
                 });
+
+                div.querySelector(`[data-comment-id="${c.id}"]`).addEventListener('click', (e) => {
+                    const btn = e.currentTarget;
+                    replyingToData = {
+                        id: btn.getAttribute('data-comment-id'),
+                        texto: btn.getAttribute('data-comment-text'),
+                        authorId: btn.getAttribute('data-author-id') || 'desconhecido'
+                    };
+                    document.getElementById('reply-preview-text').innerText = `"${replyingToData.texto}"`;
+                    document.getElementById('reply-preview-container').style.display = 'flex';
+                    commentInput.focus();
+                });
+
                 commentsList.appendChild(div);
             });
             commentsList.scrollTop = commentsList.scrollHeight;
@@ -587,11 +705,15 @@
 
         document.getElementById('btn-send').addEventListener('click', async () => {
             const txt = postInput.value.trim(); if(!txt) return;
+            
+            // BOT MODERADOR AVALIA O POST
+            const aprovado = await botAnalisarTexto(txt);
+            if (!aprovado) return; // Barra o envio se reprovado
+
             const btn = document.getElementById('btn-send'); btn.disabled = true; btn.innerText = 'Enviando...';
             try {
-                // Modificado para fsServerTimestamp() 
                 await addDoc(collection(db, "mensagens_anonimas"), { 
-                    texto: txt, likes: 0, comentarios: [], timestamp: fsServerTimestamp() 
+                    texto: txt, likes: 0, comentarios: [], timestamp: fsServerTimestamp(), authorId: myUserId 
                 });
                 postInput.value = ''; togglePostPanel(false);
             } catch(e) {} finally { btn.disabled = false; btn.innerText = 'Enviar Mensagem'; }
@@ -600,10 +722,28 @@
         document.getElementById('btn-send-comment').addEventListener('click', async () => {
             const txt = commentInput.value.trim();
             if(!txt || !activeMessageId) return;
+
+            // BOT MODERADOR AVALIA O COMENTÁRIO
+            const aprovado = await botAnalisarTexto(txt);
+            if (!aprovado) return; // Barra o envio se reprovado
+
             const msg = mensagensGlobais.find(m => m.id === activeMessageId);
             const comentariosAtuais = msg.comentarios || [];
-            const novoComment = { id: Date.now().toString() + Math.floor(Math.random()*1000), texto: txt, likes: 0 };
+            
+            const novoComment = { 
+                id: Date.now().toString() + Math.floor(Math.random()*1000), 
+                texto: txt, 
+                likes: 0,
+                authorId: myUserId
+            };
+
+            if (replyingToData) {
+                novoComment.replyTo = replyingToData;
+            }
+
             commentInput.value = '';
+            cancelarResposta(); 
+
             try {
                 await updateDoc(doc(db, "mensagens_anonimas", activeMessageId), {
                     comentarios: [...comentariosAtuais, novoComment]
